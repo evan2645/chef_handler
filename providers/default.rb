@@ -27,12 +27,6 @@ action :enable do
   # is reloaded into memory each chef run. fixes COOK-620
   handler = nil
   converge_by("load #{@new_resource.source}") do
-    begin
-      Object.send(:remove_const, klass)
-      GC.start
-    rescue
-      Chef::Log.debug("#{@new_resource.class_name} has not been loaded.")
-    end
     file_name = @new_resource.source
     file_name << ".rb" unless file_name =~ /.*\.rb$/
     load file_name
